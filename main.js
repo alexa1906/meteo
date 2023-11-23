@@ -18,16 +18,16 @@ const countries = [
     'United States of America', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Venezuela', 'Vietnam', 'Yemen', 'Zambia', 'Zimbabwe'
   ];
 
-const fetchWeatherData = (country) => {
-  const url = `http://api.weatherapi.com/v1/current.json?key=${API_KEY}&aqi=yes&q=${country}`;
+const fetchWeatherData = (countries) => {
+  const url = `http://api.weatherapi.com/v1/current.json?key=${API_KEY}&aqi=yes&q=${countries}`;
   return fetch(url)
     .then(response => response.json())
     .then(data => console.log(data))
     .catch(error => console.error(error));
 };
 
-countries.forEach(country => {
-  fetchWeatherData(country);
+countries.forEach(countries => {
+  fetchWeatherData(countries);
 });
 
 
