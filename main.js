@@ -21,97 +21,95 @@ const countries = [
 
 const fetchWeatherData = (country) => {
   const url = `http://api.weatherapi.com/v1/current.json?key=${API_KEY}&aqi=yes&q=${country}`;
-
-  fetch(url)
+  return fetch(url)
     .then(response => response.json())
-    .then(data => {
-      console.log(`Weather data for ${country}:`, data);
-      updateWeatherCard(country, data);
-    })
-    .catch(error => console.error(`There was a problem fetching the weather data for ${country}:`, error));
+    .catch(error => {
+      console.error(error);
+      throw error;
+    });
 };
 
-const updateWeatherCard = (country, data) => {
-  const weatherContainer = document.getElementById('weather-container');
-
-  const weatherCard = document.createElement('div');
-  weatherCard.classList.add('card');
-
-  const weatherElement = document.createElement('div');
-  weatherElement.classList.add('weather');
-
-  weatherElement.innerHTML = `
-    <h2 class="city">Weather in ${country}</h2>
-    <h1 class="temp">${data.current.temp_c}°C</h1>
-    <div class="flex">
-      <img src="${data.current.condition.icon}" alt="" class="icon" />
-      <div class="description">${data.current.condition.text}</div>
-    </div>
-    <div class="humidity">Humidity: ${data.current.humidity}%</div>
-    <div class="wind">Wind speed: ${data.current.wind_kph} km/h</div>
-    <div class="wind-details">
-      Wind Direction: ${data.current.wind_dir}<br>
-      Wind Degree: ${data.current.wind_degree}<br>
-      Wind Gust: ${data.current.gust_kph} km/h<br>
-      Wind Pressure: ${data.current.pressure_mb} mb<br>
-    </div>
-  `;
-
-  weatherCard.appendChild(weatherElement);
-  weatherContainer.appendChild(weatherCard);
+const updateElement = (element, content) => {
+  if (element instanceof Element) {
+    element.textContent = content;
+  } else {
+    document.querySelector(element).textContent = content;
+  }
 };
 
+const updateWeatherUI = (data) => {
+  const weatherMainElements = {
+    '.weather-main .city-weather': `Weather in ${data.location.name}`,
+    '.weather-main .region': `Region: ${data.location.region}`,
+    '.weather-main .country': `Country: ${data.location.country}`,
+    '.weather-main .lat': `Latitude: ${data.location.lat}`,
+    '.weather-main .lon': `Longitude: ${data.location.lon}`,
+    '.weather-main .tz_id': `Time Zone: ${data.location.tz_id}`,
+    '.weather-main .localtime_epoch': `Local Time Epoch: ${data.location.localtime_epoch}`,
+    '.weather-main .localtime': `Local Time: ${data.location.localtime}`
+  };
 
-countries.forEach(country => {
-  fetchWeatherData(country);
-});
+  for (const [element, content] of Object.entries(weatherMainElements)) {
+    updateElement(element, content);
+  }
 
-  const fetchWeatherData = (country) => {
-    const url = `http://api.weatherapi.com/v1/current.json?key=${API_KEY}&aqi=yes&q=${country}`;
-    return fetch(url)
-      .then(response => response.json())
-      .catch(error => {
-        console.error(error);
-        throw error;
-      });
+  const elements = {
+    '.second-main .last_updated': `Last Updated: ${data.current.last_updated}`,
+    '.second-main .temp_c': `Tempreature °C: ${data.current.temp_c}`,
+    '.second-main .temp_f': `Tempreature °F: ${data.current.temp_f}`,
+    '.second-main .is_day': `Day: ${data.current.is_day}`,
+    '.second-main .wind_mph': `Wind mph: ${data.current.wind_mph}`,
+    '.second-main .wind_kph': `Wind kph: ${data.current.wind_kph}`,
+    '.second-main .wind_degree': `Wind Degree: ${data.current.wind_degree}`,
+    '.second-main .pressure_mb': `Pressure Milibar: ${data.current.pressure_mb}`,
+    '.second-main .pressure_in': `Pressure: ${data.current.pressure_in}`,
+    '.second-main .precip_mm': `Precipitation Milibar: ${data.current.precip_mm}`,
+    '.second-main .precip_in': `Precipitation: ${data.current.precip_in}`,
+    '.second-main .humidity': `Humidity: ${data.current.humidity}`,
+    '.second-main .cloud': `Cloud: ${data.current.cloud}`,
+    '.second-main .feelslike_c': `Feelslike °C:${data.current.feelslike_c}`,
+    '.second-main .feelslike_f': `Feelslike °F:${data.current.feelslike_f}`,
+    '.second-main .vis_km': `Visability Kilometers${data.current.vis_km}`,
+    '.second-main .vis_miles': `Visability Miles: ${data.current.vis_miles}`,
+    '.second-main .uv': `UV: ${data.current.uv}`,
+    '.second-main .gust_mph': `Mph: ${data.current.gust_mph}`,
+    '.second-main .gust_kph': `Kph: ${data.current.gust_kph}`,
+    '.second-main .wind_dir': `Wind Direction: ${data.current.wind_dir}`,
   };
-  
-  const updateElement = (element, content) => document.querySelector(element).textContent = content;
-  
-  const updateWeatherUI = (data) => {
-    updateElement('.weather-main .city-weather', `Weather in ${data.location.name}`);
-    updateElement('.weather-main .region', data.location.region);
-    updateElement('.weather-main .country', data.location.country);
-    updateElement('.weather-main .lat', data.location.lat);
-    updateElement('.weather-main .lon', data.location.lon);
-    updateElement('.weather-main .tz_id', data.location.tz_id);
-    updateElement('.weather-main .localtime_epoch', data.location.localtime_epoch);
-    updateElement('.weather-main .localtime', data.location.localtime);
-  
-    const elements = [
-      '.last_updated', '.temp_c', '.temp_f', '.is_day', '.wind_mph', '.wind_kph', '.wind_degree', '.wind_dir', '.pressure_mb', '.pressure_in',
-      '.precip_mm', '.precip_in', '.humidity', '.cloud', '.feelslike_c', '.feelslike_f', '.vis_km', '.vis_miles', '.uv', '.gust_mph', '.gust_kph'
-    ];
-  
-    elements.forEach((element, index) => updateElement(`.second-main ${element}`, data.current[elements[index].substring(1)]));
-  
-    const airQualityElements = ['.co', '.no2', '.o3', '.so2', '.pm2_5', '.pm10', '.us-epa-index', '.gb-defra-index'];
-    airQualityElements.forEach((element, index) => updateElement(`.second-main .air_quality ${element}`, data.current.air_quality[airQualityElements[index].substring(1)]));
+
+  for (const [element, content] of Object.entries(elements)) {
+    updateElement(element, content);
+  }
+
+  const airQualityElements = {
+    '.second-main .air_quality .o3': `o3: ${data.current.air_quality.o3}`,
+    '.second-main .air_quality .co': `Co: ${data.current.air_quality.co}`,
+    '.second-main .air_quality .no2': `No2: ${data.current.air_quality.no2}`,
+    '.second-main .air_quality .so2': `So2: ${data.current.air_quality.so2}`,
+    '.second-main .air_quality .pm2_5': `Suspended particles 2.5: ${data.current.air_quality.pm2_5}`,
+    '.second-main .air_quality .pm10': `Suspended particles 2.5: ${data.current.air_quality.pm10}`,
+    '.second-main .air_quality .us-epa-index': `AQI: ${data.current.air_quality.us_epa_index}`,
+    '.second-main .air_quality .gb-defra-index': `DAQI: ${data.current.air_quality.gb_defra_index}`,
   };
-  
-  const searchAndUpdateWeather = () => {
-    const searchInput = document.querySelector('.search-bar');
-    const searchTerm = searchInput.value;
-  
-    if (countries.includes(searchTerm)) {
-      fetchWeatherData(searchTerm)
-        .then(data => updateWeatherUI(data))
-        .catch(error => console.error('Error updating UI:', error));
-    } else {
-      console.error('Country not found');
-    }
-  };
-  
-  const searchButton = document.querySelector('.searchButton');
-  searchButton.addEventListener('click', searchAndUpdateWeather);
+
+  for (const [element, content] of Object.entries(airQualityElements)) {
+    updateElement(element, content);
+  }
+};
+
+const searchAndUpdateWeather = () => {
+  const searchInput = document.querySelector('.search-bar');
+  const searchTerm = searchInput.value;
+
+  if (countries.includes(searchTerm)) {
+    fetchWeatherData(searchTerm)
+      .then(data => updateWeatherUI(data))
+      .catch(error => console.error('Error updating UI:', error));
+  } else {
+    console.error('Country not found');
+  }
+};
+
+const searchButton = document.querySelector('.searchButton');
+searchButton.addEventListener('click', searchAndUpdateWeather);
 
