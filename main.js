@@ -18,16 +18,54 @@ const countries = [
     'United States of America', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Venezuela', 'Vietnam', 'Yemen', 'Zambia', 'Zimbabwe'
   ];
 
-const fetchWeatherData = (countries) => {
-  const url = `http://api.weatherapi.com/v1/current.json?key=${API_KEY}&aqi=yes&q=${countries}`;
-  return fetch(url)
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error(error));
-};
 
-countries.forEach(countries => {
-  fetchWeatherData(countries);
-});
 
+  const fetchWeatherData = (country) => {
+    const url = `http://api.weatherapi.com/v1/current.json?key=${API_KEY}&aqi=yes&q=${country}`;
+    return fetch(url)
+      .then(response => response.json())
+      .catch(error => {
+        console.error(error);
+        throw error;
+      });
+  };
+  
+  const updateElement = (element, content) => document.querySelector(element).textContent = content;
+  
+  const updateWeatherUI = (data) => {
+    updateElement('.weather-main .city-weather', `Weather in ${data.location.name}`);
+    updateElement('.weather-main .region', data.location.region);
+    updateElement('.weather-main .country', data.location.country);
+    updateElement('.weather-main .lat', data.location.lat);
+    updateElement('.weather-main .lon', data.location.lon);
+    updateElement('.weather-main .tz_id', data.location.tz_id);
+    updateElement('.weather-main .localtime_epoch', data.location.localtime_epoch);
+    updateElement('.weather-main .localtime', data.location.localtime);
+  
+    const elements = [
+      '.last_updated', '.temp_c', '.temp_f', '.is_day', '.wind_mph', '.wind_kph', '.wind_degree', '.wind_dir', '.pressure_mb', '.pressure_in',
+      '.precip_mm', '.precip_in', '.humidity', '.cloud', '.feelslike_c', '.feelslike_f', '.vis_km', '.vis_miles', '.uv', '.gust_mph', '.gust_kph'
+    ];
+  
+    elements.forEach((element, index) => updateElement(`.second-main ${element}`, data.current[elements[index].substring(1)]));
+  
+    const airQualityElements = ['.co', '.no2', '.o3', '.so2', '.pm2_5', '.pm10', '.us-epa-index', '.gb-defra-index'];
+    airQualityElements.forEach((element, index) => updateElement(`.second-main .air_quality ${element}`, data.current.air_quality[airQualityElements[index].substring(1)]));
+  };
+  
+  const searchAndUpdateWeather = () => {
+    const searchInput = document.querySelector('.search-bar');
+    const searchTerm = searchInput.value;
+  
+    if (countries.includes(searchTerm)) {
+      fetchWeatherData(searchTerm)
+        .then(data => updateWeatherUI(data))
+        .catch(error => console.error('Error updating UI:', error));
+    } else {
+      console.error('Country not found');
+    }
+  };
+  
+  const searchButton = document.querySelector('.searchButton');
+  searchButton.addEventListener('click', searchAndUpdateWeather);
 
