@@ -110,6 +110,14 @@ const searchAndUpdateWeather = () => {
   }
 };
 
+const updateWeatherForDefaultLocation = () => {
+  const defaultLocation = 'London'; 
+  fetchWeatherData(defaultLocation)
+    .then(data => updateWeatherUI(data))
+    .catch(error => console.error('Error updating UI:', error));
+};
+updateWeatherForDefaultLocation();
+
 const searchButton = document.querySelector('.searchButton');
 searchButton.addEventListener('click', searchAndUpdateWeather);
 
