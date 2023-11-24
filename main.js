@@ -69,7 +69,7 @@ const updateWeatherUI = (data) => {
     '.second-main .cloud': `Cloud: ${data.current.cloud}`,
     '.second-main .feelslike_c': `Feelslike °C:${data.current.feelslike_c}`,
     '.second-main .feelslike_f': `Feelslike °F:${data.current.feelslike_f}`,
-    '.second-main .vis_km': `Visability Kilometers${data.current.vis_km}`,
+    '.second-main .vis_km': `Visability Kilometers: ${data.current.vis_km}`,
     '.second-main .vis_miles': `Visability Miles: ${data.current.vis_miles}`,
     '.second-main .uv': `UV: ${data.current.uv}`,
     '.second-main .gust_mph': `Mph: ${data.current.gust_mph}`,
@@ -87,14 +87,13 @@ const updateWeatherUI = (data) => {
     '.second-main .air_quality .no2': `No2: ${data.current.air_quality.no2}`,
     '.second-main .air_quality .so2': `So2: ${data.current.air_quality.so2}`,
     '.second-main .air_quality .pm2_5': `Suspended particles 2.5: ${data.current.air_quality.pm2_5}`,
-    '.second-main .air_quality .pm10': `Suspended particles 2.5: ${data.current.air_quality.pm10}`,
-    '.second-main .air_quality .us-epa-index': `AQI: ${data.current.air_quality.us_epa_index}`,
-    '.second-main .air_quality .gb-defra-index': `DAQI: ${data.current.air_quality.gb_defra_index}`,
+    '.second-main .air_quality .pm10': `Suspended particles 10: ${data.current.air_quality.pm10}`,
   };
 
   for (const [element, content] of Object.entries(airQualityElements)) {
     updateElement(element, content);
   }
+  
 };
 
 const searchAndUpdateWeather = () => {
