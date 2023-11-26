@@ -11,6 +11,9 @@ body {
 }
 
 .card {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
   background: rgba(0, 0, 0, 0.3);
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   backdrop-filter: blur(11.5px);
@@ -18,20 +21,10 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.18);
   color: white;
   padding: 2em;
-  border-radius: 30px;
-  width: 80%;
-  max-width: 920px;
+  width: 100%;
+  max-width: 1220px;
   margin: 1em;
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-}
-
-.search {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-direction: column;
-  align-items: flex-start;
+  margin-top: 50px;
 }
 
 button {
@@ -39,7 +32,7 @@ button {
   border-radius: 50%;
   border: none;
   height: 44px;
-  width: 40px;
+  width: 44px;
   outline: none;
   background: rgba(255, 255, 255, 0.25);
   color: white;
@@ -67,34 +60,10 @@ button:hover {
   background: #7c7c7c6b;
 }
 
-h1.temp {
-  margin: 0;
-  margin-bottom: 0.4em;
-}
-
-.flex {
-  display: flex;
-  align-items: center;
-}
-
-.description {
-  text-transform: capitalize;
-  margin-left: 8px;
-}
-
-.js-tilt-glare {
-  border-radius: 10px;
-}
-
 .weather-main {
   display: flex;
   flex-direction: column;
   align-items: left;
-}
-
-.condition {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
 }
 
 .search-bar {
@@ -106,11 +75,49 @@ h1.temp {
   color: white;
   font-family: inherit;
   font-size: 105%;
-  width: calc(100% - 80px);
+  width: 100%;
 }
 
-.current {
+.second-main {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  margin-bottom: 10rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 13px;
+}
+
+.country {
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.375);
+}
+
+.info-box {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 15px;
+  padding: 0.5rem 1.5em;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease-in-out;
+}
+
+.info-box:hover {
+  transform: translateY(-5px);
+}
+
+.info-box div {
+  padding-top: 10px;
+}
+
+.info-box img {
+  width: 25px;
+  float: left;
+  margin-right: 10px;
+}
+
+.type {
+  border-bottom: 1px solid rgba(218, 218, 218, 0.668);
+  padding-bottom: 5px;
+  color: rgba(255, 255, 255, 0.633);
+}
+
+.first {
+  padding-top: 15px;
 }
